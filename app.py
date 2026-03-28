@@ -8,8 +8,8 @@ from pages.admin      import show_admin_page
 st.set_page_config(
     page_title="ZabDelivers",
     page_icon="🍔",
-    layout="wide",
-    initial_sidebar_state="collapsed",
+    layout="centered",
+    initial_sidebar_state="collapsed"
 )
 
 @st.cache_resource
