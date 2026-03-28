@@ -119,7 +119,6 @@ def _dashboard(db):
             sc.columns = ["Status", "Count"]
 
             if HAS_PLOTLY:
-                # Color-coded by status
                 STATUS_COLORS = {
                     "pending":   "#F97316",
                     "confirmed": "#3B82F6",
@@ -156,7 +155,6 @@ def _dashboard(db):
             if rev:
                 rev_df = pd.DataFrame(rev)
                 if HAS_PLOTLY:
-                    # Gradient blue-teal colors
                     n = len(rev_df)
                     colors = [f"rgba(13,148,136,{0.4 + 0.6*i/(max(n-1,1))})" for i in range(n)]
                     fig2 = go.Figure(go.Bar(
@@ -188,7 +186,7 @@ def _dashboard(db):
 
 
 def _all_orders(db):
-    page_header("All Orders")
+    page_header("All Orders", "View-only — order status is managed by each restaurant")
 
     col1, col2, col3 = st.columns([3, 2, 1])
     with col1:
@@ -212,6 +210,14 @@ def _all_orders(db):
                     s in r["customer_email"].lower()]
 
     render_html(f'<div style="color:{TEXT_MUTED};font-size:0.82rem;margin:0.5rem 0 1rem;font-weight:600;">{len(filtered)} orders found</div>')
+
+    # Info note
+    render_html(f"""
+    <div style="background:#EFF6FF;border:1.5px solid #BFDBFE;border-radius:12px;
+                padding:0.8rem 1.2rem;margin-bottom:1.2rem;font-size:0.82rem;color:#1D4ED8;font-weight:600;">
+        ℹ️ Order status is updated by the restaurant. Admins have view-only access here.
+    </div>
+    """)
 
     for row in filtered:
         order = Order(row)
@@ -258,22 +264,15 @@ def _all_orders(db):
                         <span style="color:{TEXT_MUTED};">Delivery</span>
                         <span style="color:{TEXT};">{"Free" if order.delivery_charge == 0 else f"Rs. {order.delivery_charge:,.0f}"}</span>
                     </div>
-                    <div style="display:flex;justify-content:space-between;font-size:1rem;font-weight:700;padding-top:8px;border-top:1px solid {BORDER};margin-top:4px;">
+                    <div style="display:flex;justify-content:space-between;font-size:1rem;font-weight:700;
+                                padding-top:8px;border-top:1px solid {BORDER};margin-top:4px;">
                         <span style="color:{TEXT};">Total</span>
                         <span style="color:{PRIMARY};font-family:'Space Grotesk',sans-serif;">Rs. {order.total:,.0f}</span>
                     </div>
                 </div>
                 """)
-
-            render_html(f'<div class="zd-section-label" style="margin-top:0.9rem;">Update Status</div>')
-            all_statuses = ["pending", "confirmed", "preparing", "ready", "picked_up", "delivered", "cancelled"]
-            cols = st.columns(len(all_statuses))
-            for i, s in enumerate(all_statuses):
-                with cols[i]:
-                    t = "primary" if order.status == s else "secondary"
-                    if st.button(s[:7], key=f"ast_{order.id}_{s}", type=t, use_container_width=True):
-                        db.update_order_status(order.id, s)
-                        st.rerun()
+            # ── NO STATUS CHANGE BUTTONS HERE ──
+            # Status is managed by the restaurant only
 
 
 def _customers(db):
@@ -385,7 +384,6 @@ def _restaurants(db):
 def _branches(db):
     page_header("Restaurant Branches", "Manage city-wise branches for each restaurant")
 
-    # Add branch
     with st.expander("Add New Branch"):
         restaurants = db.get_all_restaurants_admin()
         rest_names  = [r["name"] for r in restaurants]
@@ -408,13 +406,11 @@ def _branches(db):
 
     st.markdown("<div style='height:0.5rem'></div>", unsafe_allow_html=True)
 
-    # Show all branches grouped by restaurant
     all_branches = db.get_all_branches_admin()
     if not all_branches:
         render_html(f'<div style="text-align:center;padding:3rem;color:{TEXT_MUTED};">No branches yet.</div>')
         return
 
-    # Group by restaurant
     grouped: dict = {}
     for b in all_branches:
         grouped.setdefault(b["restaurant_name"], []).append(b)
@@ -453,10 +449,8 @@ def _delivery_settings(db):
     page_header("City Delivery Settings", "Set delivery time and charges per city — these reflect live in the app")
 
     all_settings = db.get_all_city_settings()
-    # Also show cities not yet in DB
     existing_cities = {s["city"] for s in all_settings}
 
-    # Add new city
     with st.expander("Configure New City"):
         available_new = [c for c in PAKISTAN_CITIES if c not in existing_cities]
         if available_new:
