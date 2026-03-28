@@ -317,6 +317,39 @@ def _cart_page(db, user):
             render_html(f'<div style="font-family:\'Space Grotesk\',sans-serif;font-size:1.5rem;font-weight:800;color:{TEXT};margin-bottom:0.3rem;">Delivery Details</div>')
             render_html(f'<div style="font-size:0.85rem;color:{TEXT_MUTED};margin-bottom:1.2rem;">Fill in your delivery info below</div>')
 
+            # ── City picker OUTSIDE the form so branch list updates instantly ──
+            active_cities = db.get_all_active_cities()
+            all_cities = active_cities if active_cities else PAKISTAN_CITIES
+            prev_city = st.session_state.get("checkout_city", all_cities[0] if all_cities else "Lahore")
+            city_idx = all_cities.index(prev_city) if prev_city in all_cities else 0
+
+            c_city = st.selectbox("City*", all_cities, index=city_idx, key="checkout_city_selector")
+
+            # Persist immediately — triggers rerun so branch list and delivery banner react
+            if c_city != st.session_state.get("checkout_city"):
+                st.session_state.checkout_city = c_city
+                st.rerun()
+
+            # ── Branch selector driven by the live city value ──
+            branches_in_city = db.get_branches_by_city(cart.restaurant_id, c_city) if cart.restaurant_id else []
+            selected_branch_id = None
+            if branches_in_city:
+                branch_labels = [f"{b['address']} ({b['city']})" for b in branches_in_city]
+                branch_choice = st.selectbox(
+                    f"Nearest Branch in {c_city}",
+                    branch_labels,
+                    key="checkout_branch_selector",
+                    help="Your order will be prepared at this branch",
+                )
+                chosen_idx = branch_labels.index(branch_choice)
+                selected_branch_id = branches_in_city[chosen_idx]["id"]
+            else:
+                render_html(
+                    f'<div style="font-size:0.8rem;color:{TEXT_MUTED};margin-bottom:0.6rem;padding:0.5rem 0.8rem;'
+                    f'background:#FFF7ED;border:1px solid #FED7AA;border-radius:8px;">'
+                    f'⚠️ No branches found in <b>{c_city}</b> — order will be fulfilled from the nearest available branch.</div>'
+                )
+
             with st.form("checkout_form"):
                 c1, c2 = st.columns(2)
                 with c1:
@@ -325,26 +358,10 @@ def _cart_page(db, user):
                     c_phone   = st.text_input("Phone Number*", placeholder="03XX-XXXXXXX")
                 with c2:
                     c_country = st.text_input("Country*", value="Pakistan", placeholder="Country")
-                    # City dropdown — active cities from DB
-                    active_cities = db.get_all_active_cities()
-                    all_cities = active_cities if active_cities else PAKISTAN_CITIES
-                    prev_city = st.session_state.get("checkout_city", all_cities[0] if all_cities else "Lahore")
-                    city_idx = all_cities.index(prev_city) if prev_city in all_cities else 0
-                    c_city = st.selectbox("City*", all_cities, index=city_idx)
+                    # City shown as read-only — changed via the selector above
+                    st.text_input("City", value=c_city, disabled=True,
+                                  help="Change city using the selector above the form")
                     c_address = st.text_input("Street Address*", placeholder="Full delivery address")
-
-                # Branch selector — only show if restaurant has branches in chosen city
-                branches_in_city = db.get_branches_by_city(cart.restaurant_id, c_city) if cart.restaurant_id else []
-                selected_branch_id = None
-                if branches_in_city:
-                    branch_labels = [f"{b['address']} ({b['city']})" for b in branches_in_city]
-                    branch_choice = st.selectbox(
-                        f"Nearest Branch in {c_city}",
-                        branch_labels,
-                        help="Your order will be prepared at this branch"
-                    )
-                    chosen_idx = branch_labels.index(branch_choice)
-                    selected_branch_id = branches_in_city[chosen_idx]["id"]
 
                 notes = st.text_area("Special Instructions (optional)", placeholder="Any notes for the restaurant...", height=70)
 
