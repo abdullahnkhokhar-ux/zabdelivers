@@ -168,7 +168,6 @@ html, body, [class*="css"] {{
     padding: 0.65rem 0.9rem !important;
     transition: border-color 0.15s, box-shadow 0.15s !important;
 }}
-/* THE KEY FIX: Explicit dark placeholder color */
 .stTextInput > div > div > input::placeholder {{
     color: #64748B !important;
     opacity: 1 !important;
@@ -184,25 +183,21 @@ html, body, [class*="css"] {{
     opacity: 1 !important;
     font-style: italic !important;
 }}
-/* WebKit explicit */
 .stTextInput > div > div > input::-webkit-input-placeholder,
 .stTextArea > div > div > textarea::-webkit-input-placeholder {{
     color: #64748B !important;
     opacity: 1 !important;
 }}
-/* Mozilla explicit */
 .stTextInput > div > div > input::-moz-placeholder,
 .stTextArea > div > div > textarea::-moz-placeholder {{
     color: #64748B !important;
     opacity: 1 !important;
 }}
-/* MS explicit */
 .stTextInput > div > div > input:-ms-input-placeholder,
 .stTextArea > div > div > textarea:-ms-input-placeholder {{
     color: #64748B !important;
     opacity: 1 !important;
 }}
-
 .stTextInput > div > div > input:focus,
 .stTextArea > div > div > textarea:focus,
 .stNumberInput > div > div > input:focus {{
@@ -274,7 +269,7 @@ html, body, [class*="css"] {{
     box-shadow: 0 6px 20px {SHADOW_MD} !important;
 }}
 
-/* ── Metrics with top accent bar ── */
+/* ── Metrics ── */
 [data-testid="stMetric"] {{
     background: {SURFACE} !important;
     border: 1.5px solid {BORDER} !important;
@@ -329,7 +324,7 @@ html, body, [class*="css"] {{
     box-shadow: 0 2px 8px {SHADOW} !important;
 }}
 
-/* ── Vega/Altair charts — FORCE LIGHT BG ── */
+/* ── Vega/Altair charts ── */
 [data-testid="stVegaLiteChart"] {{
     background: {SURFACE} !important;
     border-radius: 14px !important;
@@ -338,12 +333,8 @@ html, body, [class*="css"] {{
     box-shadow: 0 2px 8px {SHADOW} !important;
     overflow: hidden !important;
 }}
-[data-testid="stVegaLiteChart"] > div {{
-    background: {SURFACE} !important;
-}}
-.vega-embed {{
-    background: {SURFACE} !important;
-}}
+[data-testid="stVegaLiteChart"] > div {{ background: {SURFACE} !important; }}
+.vega-embed {{ background: {SURFACE} !important; }}
 
 /* ── Radio ── */
 .stRadio label {{
@@ -363,13 +354,9 @@ html, body, [class*="css"] {{
     background: {PRIMARY_LIGHT} !important;
 }}
 
-/* ── Alerts ── */
+/* ── Misc ── */
 .stAlert {{ border-radius: 12px !important; }}
-
-/* ── Divider ── */
 hr {{ border-color: {BORDER} !important; margin: 0.5rem 0 !important; }}
-
-/* ── Caption ── */
 .stCaption {{ color: {TEXT_MUTED} !important; }}
 
 /* ── Section label ── */
@@ -428,7 +415,6 @@ hr {{ border-color: {BORDER} !important; margin: 0.5rem 0 !important; }}
     box-shadow: 0 6px 20px {SHADOW_MD};
     transform: translateY(-2px);
 }}
-
 .zd-rest-card {{
     background: {SURFACE};
     border: 1.5px solid {BORDER};
@@ -445,7 +431,6 @@ hr {{ border-color: {BORDER} !important; margin: 0.5rem 0 !important; }}
     box-shadow: 0 8px 28px rgba(13,148,136,0.15);
     transform: translateY(-3px);
 }}
-
 .zd-menu-item {{
     display: flex;
     justify-content: space-between;
@@ -454,7 +439,6 @@ hr {{ border-color: {BORDER} !important; margin: 0.5rem 0 !important; }}
     border-bottom: 1px solid {SURFACE3};
 }}
 .zd-menu-item:last-child {{ border-bottom: none; }}
-
 .zd-cart-row {{
     display: flex;
     justify-content: space-between;
@@ -463,7 +447,6 @@ hr {{ border-color: {BORDER} !important; margin: 0.5rem 0 !important; }}
     border-bottom: 1px solid {SURFACE3};
 }}
 .zd-cart-row:last-child {{ border-bottom: none; }}
-
 .zd-auth-card {{
     background: {SURFACE};
     border: 1.5px solid {BORDER};
@@ -472,23 +455,17 @@ hr {{ border-color: {BORDER} !important; margin: 0.5rem 0 !important; }}
     box-shadow: 0 8px 40px {SHADOW};
 }}
 
-/* ── Hide only the "Press Enter to submit" instructions by exact testid ── */
-[data-testid="InputInstructions"] {{
-    display: none !important;
-}}
+/* ── Hide press-enter instruction ── */
+[data-testid="InputInstructions"] {{ display: none !important; }}
 
-/* ── Remove white box / ghost container above tabs ── */
+/* ── Remove ghost form container ── */
 [data-testid="stForm"] {{
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
     padding: 0 !important;
 }}
-
-/* ── Tab panel top gap removal ── */
-.stTabs [data-baseweb="tab-panel"] {{
-    padding-top: 0 !important;
-}}
+.stTabs [data-baseweb="tab-panel"] {{ padding-top: 0 !important; }}
 .zd-auth-card [data-testid="stVerticalBlockBorderWrapper"] {{
     background: transparent !important;
     border: none !important;
@@ -497,33 +474,208 @@ hr {{ border-color: {BORDER} !important; margin: 0.5rem 0 !important; }}
 }}
 
 /* ════════════════════════════════════════════════════════════
-   BUTTONS — CENTERED WITH PROPER PADDING FROM BOUNDARIES
+   BUTTONS — CENTERED WITH PROPER PADDING
    ════════════════════════════════════════════════════════════ */
-/* All nav buttons: add horizontal margin so they don't hug column edges */
 .stButton > button {{
     margin: 0 4px !important;
     padding: 0.55rem 1.2rem !important;
     min-height: 42px !important;
 }}
-/* Form submit buttons stay full width but with proper vertical padding */
 [data-testid="stFormSubmitButton"] button {{
     margin: 0.5rem 0 0 !important;
     padding: 0.8rem 1.5rem !important;
     min-height: 48px !important;
 }}
-/* Centered column alignment for button containers */
 [data-testid="stHorizontalBlock"] > div [data-testid="stButton"] {{
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
 }}
-/* Nav button row: ensure equal spacing and centered labels */
 [data-testid="stButton"] > button {{
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     text-align: center !important;
     white-space: nowrap !important;
+}}
+
+/* ════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE — 768px and below
+   ════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {{
+
+    /* Navbar — smaller and tighter on mobile */
+    .zd-navbar {{
+        padding: 0 1rem !important;
+        height: 56px !important;
+    }}
+    .zd-brand {{
+        font-size: 1.15rem !important;
+    }}
+    .zd-brand-dot {{
+        width: 8px !important;
+        height: 8px !important;
+    }}
+    .zd-user-chip {{
+        font-size: 0.72rem !important;
+        padding: 0.3rem 0.7rem !important;
+    }}
+
+    /* Page container — less padding on mobile */
+    .zd-page {{
+        padding: 1rem 0.8rem 3rem !important;
+    }}
+
+    /* Page title smaller */
+    .zd-page-title {{
+        font-size: 1.4rem !important;
+    }}
+    .zd-page-sub {{
+        font-size: 0.82rem !important;
+        margin-bottom: 1.2rem !important;
+    }}
+
+    /* Nav buttons — smaller font and padding */
+    .stButton > button {{
+        font-size: 0.75rem !important;
+        padding: 0.4rem 0.5rem !important;
+        min-height: 38px !important;
+        margin: 0 2px !important;
+    }}
+
+    /* Stack columns on mobile — make Streamlit columns full width */
+    [data-testid="stHorizontalBlock"] {{
+        flex-wrap: wrap !important;
+        gap: 0.5rem !important;
+    }}
+    [data-testid="stHorizontalBlock"] > div {{
+        min-width: 100% !important;
+        flex: 1 1 100% !important;
+    }}
+
+    /* Cards — reduce padding */
+    .zd-card {{
+        padding: 1rem 1rem !important;
+        border-radius: 12px !important;
+    }}
+    .zd-rest-card {{
+        padding: 1rem 1.1rem !important;
+        border-radius: 12px !important;
+    }}
+
+    /* Auth card — smaller padding */
+    .zd-auth-card {{
+        padding: 1.4rem 1.1rem !important;
+        border-radius: 16px !important;
+    }}
+
+    /* Metrics — smaller value text */
+    [data-testid="stMetricValue"] {{
+        font-size: 1.4rem !important;
+    }}
+    [data-testid="stMetric"] {{
+        padding: 1rem 1.1rem !important;
+    }}
+
+    /* Tabs — smaller text */
+    .stTabs [data-baseweb="tab"] {{
+        font-size: 0.78rem !important;
+        padding: 0.4rem 0.7rem !important;
+    }}
+
+    /* Inputs — comfortable touch size */
+    .stTextInput > div > div > input,
+    .stTextArea > div > div > textarea,
+    .stNumberInput > div > div > input {{
+        font-size: 1rem !important;
+        padding: 0.75rem 0.9rem !important;
+        min-height: 48px !important;
+    }}
+
+    /* Selectbox touch-friendly */
+    .stSelectbox > div > div {{
+        min-height: 48px !important;
+        font-size: 1rem !important;
+    }}
+
+    /* Form submit button — big and easy to tap */
+    [data-testid="stFormSubmitButton"] button {{
+        min-height: 52px !important;
+        font-size: 1rem !important;
+    }}
+
+    /* Dataframe — allow horizontal scroll */
+    [data-testid="stDataFrame"] {{
+        overflow-x: auto !important;
+    }}
+
+    /* Expander — full width */
+    [data-testid="stExpander"] {{
+        border-radius: 10px !important;
+    }}
+
+    /* Menu item — stack on small screens */
+    .zd-menu-item {{
+        flex-direction: column !important;
+        gap: 0.4rem !important;
+        padding: 0.8rem 0 !important;
+    }}
+
+    /* Cart row — stack on small screens */
+    .zd-cart-row {{
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.3rem !important;
+    }}
+
+    /* Section label smaller */
+    .zd-section-label {{
+        font-size: 0.65rem !important;
+    }}
+
+    /* Badge smaller */
+    .zd-badge {{
+        font-size: 0.62rem !important;
+        padding: 3px 9px !important;
+    }}
+
+    /* Hide hover effects on touch devices */
+    .zd-card:hover,
+    .zd-rest-card:hover,
+    [data-testid="stMetric"]:hover {{
+        transform: none !important;
+    }}
+}}
+
+/* ════════════════════════════════════════════════════════════
+   VERY SMALL SCREENS — 480px and below (phones)
+   ════════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {{
+
+    .zd-navbar {{
+        padding: 0 0.75rem !important;
+        height: 52px !important;
+    }}
+    .zd-brand {{
+        font-size: 1rem !important;
+    }}
+    .zd-page {{
+        padding: 0.75rem 0.6rem 2.5rem !important;
+    }}
+    .zd-page-title {{
+        font-size: 1.2rem !important;
+    }}
+    .stButton > button {{
+        font-size: 0.7rem !important;
+        padding: 0.35rem 0.4rem !important;
+        min-height: 36px !important;
+    }}
+    [data-testid="stMetricValue"] {{
+        font-size: 1.2rem !important;
+    }}
+    .zd-auth-card {{
+        padding: 1.1rem 0.9rem !important;
+    }}
 }}
 </style>
 """
@@ -552,7 +704,6 @@ def render_nav_buttons(nav_items, active_page, page_key, extra_cols=None):
     """Render centered nav pills as Streamlit buttons in a row."""
     n = len(nav_items)
     pad = max(1, (8 - n) // 2)
-    # interleave small gap cols: [pad, gap, btn, gap, btn, ..., gap, signout]
     col_widths = [pad]
     for _ in range(n):
         col_widths += [0.1, 1]
