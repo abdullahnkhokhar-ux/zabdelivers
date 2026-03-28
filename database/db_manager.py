@@ -1,3 +1,6 @@
+import mysql.connector
+from mysql.connector import Error
+import bcrypt
 import streamlit as st
 
 DB_CONFIG = {
