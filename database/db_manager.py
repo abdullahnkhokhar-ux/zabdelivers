@@ -1,13 +1,11 @@
-import mysql.connector
-from mysql.connector import Error
-import bcrypt
+import streamlit as st
 
 DB_CONFIG = {
-    "host":     "127.0.0.1",
+    "host":     st.secrets["DB_HOST"],
     "port":     3306,
-    "user":     "root",
-    "password": "abdullah27032023",
-    "database": "zabdelivers",
+    "user":     st.secrets["DB_USER"],
+    "password": st.secrets["DB_PASSWORD"],
+    "database": st.secrets["DB_NAME"],
 }
 
 FREE_DELIVERY_THRESHOLD = 1000
